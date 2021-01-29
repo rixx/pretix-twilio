@@ -1,0 +1,5 @@
+recursive-include pretix_twilio/static *
+recursive-include pretix_twilio/templates *
+recursive-include pretix_twilio/locale *
+include LICENSE
+exclude .gitlab-ci.yml
