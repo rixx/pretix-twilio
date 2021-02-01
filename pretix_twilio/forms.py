@@ -106,3 +106,9 @@ class TwilioSettingsForm(SettingsForm):
         super().__init__(*args, **kwargs)
         for k, v in self.base_context.items():
             self._set_field_placeholders(k, v)
+
+    def clean(self):
+        data = self.cleaned_data
+        if not data.get("twilio_auth_token") and data.get("twilio_account_sid"):
+            # Leave password unchanged if the username is set and the password field is empty.
+            data["twilio_auth_token"] = self.initial.get("twilio_auth_token")
