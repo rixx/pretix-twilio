@@ -6,7 +6,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.services.mail import render_mail
 from pretix.base.settings import settings_hierarkey
-from pretix.base.signals import order_paid, order_placed
+from pretix.base.signals import order_canceled, order_changed, order_paid, order_placed
 from pretix.control.signals import nav_event_settings
 
 TWILIO_TEMPLATES = [
@@ -91,3 +91,13 @@ def twilio_order_placed(order, sender, **kwargs):
 @receiver(order_paid, dispatch_uid="twilio_order_paid")
 def twilio_order_paid(order, sender, **kwargs):
     twilio_order_message(order, "order_paid")
+
+
+@receiver(order_canceled, dispatch_uid="twilio_order_canceled")
+def twilio_order_canceled(order, sender, **kwargs):
+    twilio_order_message(order, "order_canceled")
+
+
+@receiver(order_changed, dispatch_uid="twilio_order_changed")
+def twilio_order_changed(order, sender, **kwargs):
+    twilio_order_message(order, "order_changed")
