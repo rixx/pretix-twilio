@@ -1,0 +1,52 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block title %} {% trans "Twilio Settings" %} {% endblock %}
+
+{% block inside %}
+    <h1>{% trans "Twilio Settings" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "General" %}</legend>
+                {% bootstrap_field form.twilio_account_sid layout="control" %}
+                {% bootstrap_field form.twilio_auth_token layout="control" %}
+                {% bootstrap_field form.twilio_sender_number layout="control" %}
+                {% bootstrap_field form.twilio_text_signature layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "E-mail content" %}</legend>
+                <div class="panel-group" id="questions_group">
+                    {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_placed_order field=form.twilio_text_order_placed %}
+
+                    {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_paid_order field=form.twilio_text_order_paid %}
+
+                    {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_free_order field=form.twilio_text_order_free %}
+
+                    {% blocktrans asvar title_changed_order %}Order changed{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_changed_order field=form.twilio_text_order_changed %}
+
+                    {% blocktrans asvar title_canceled_order %}Order canceled{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_canceled_order field=form.twilio_text_order_canceled %}
+
+                    {% blocktrans asvar title_custom_order %}Order custom SMS{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_custom_order field=form.twilio_text_order_custom_mail %}
+
+                    {% blocktrans asvar title_download_order %}Reminder to download tickets{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_download_order field=form.twilio_text_download_reminder %}
+                </div>
+            </fieldset>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
