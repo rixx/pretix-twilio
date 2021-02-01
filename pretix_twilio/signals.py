@@ -9,14 +9,9 @@ TWILIO_TEMPLATES = [
     "twilio_text_order_placed",
     "twilio_text_order_free",
     "twilio_text_order_changed",
-    "twilio_text_waiting_list",
     "twilio_text_order_canceled",
     "twilio_text_order_custom_mail",
     "twilio_text_download_reminder",
-    "twilio_text_order_placed_require_approval",
-    "twilio_text_order_approved",
-    "twilio_text_order_approved_free",
-    "twilio_text_order_denied",
     "twilio_text_order_paid",
 ]
 

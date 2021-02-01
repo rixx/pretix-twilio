@@ -61,11 +61,6 @@ class TwilioSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
     )
-    twilio_text_waiting_list = I18nFormField(
-        label=_("Text"),
-        required=False,
-        widget=I18nTextarea,
-    )
     twilio_text_order_canceled = I18nFormField(
         label=_("Text"),
         required=False,
@@ -81,46 +76,13 @@ class TwilioSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
     )
-    twilio_text_order_placed_require_approval = I18nFormField(
-        label=_("Received order"),
-        required=False,
-        widget=I18nTextarea,
-    )
-    twilio_text_order_approved = I18nFormField(
-        label=_("Approved order"),
-        required=False,
-        widget=I18nTextarea,
-        help_text=_(
-            "This will only be sent out for non-free orders. Free orders will receive the free order "
-            "template from below instead."
-        ),
-    )
-    twilio_text_order_approved_free = I18nFormField(
-        label=_("Approved free order"),
-        required=False,
-        widget=I18nTextarea,
-        help_text=_(
-            "This will only be sent out for free orders. Non-free orders will receive the non-free order "
-            "template from above instead."
-        ),
-    )
-    twilio_text_order_denied = I18nFormField(
-        label=_("Denied order"),
-        required=False,
-        widget=I18nTextarea,
-    )
     base_context = {
         "twilio_text_order_placed": ["event", "order", "payment"],
         "twilio_text_order_free": ["event", "order"],
         "twilio_text_order_changed": ["event", "order"],
-        "twilio_text_waiting_list": ["event", "waiting_list_entry"],
         "twilio_text_order_canceled": ["event", "order"],
         "twilio_text_order_custom_mail": ["event", "order"],
         "twilio_text_download_reminder": ["event", "order"],
-        "twilio_text_order_placed_require_approval": ["event", "order"],
-        "twilio_text_order_approved": ["event", "order"],
-        "twilio_text_order_approved_free": ["event", "order"],
-        "twilio_text_order_denied": ["event", "order", "comment"],
         "twilio_text_order_paid": ["event", "order", "payment_info"],
     }
 
