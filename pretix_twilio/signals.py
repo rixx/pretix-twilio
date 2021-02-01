@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.dispatch import receiver
 from django.urls import resolve, reverse
 from i18nfield.strings import LazyI18nString
@@ -5,7 +6,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.services.mail import render_mail
 from pretix.base.settings import settings_hierarkey
-from pretix.base.signals import order_placed
+from pretix.base.signals import order_paid, order_placed
 from pretix.control.signals import nav_event_settings
 
 TWILIO_TEMPLATES = [
@@ -42,8 +43,7 @@ def navbar_settings(sender, request, **kwargs):
     ]
 
 
-@receiver(order_placed, dispatch_uid="twilio_order_placed")
-def twilio_order_placed(order, sender, **kwargs):
+def twilio_order_message(order, template_name):
     from .tasks import twilio_send
 
     recipient = order.phone
@@ -55,10 +55,12 @@ def twilio_order_placed(order, sender, **kwargs):
         context["meta_" + k] = v
 
     with language(order.locale, order.event.settings.region):
+        template = order.event.settings.get(f"twilio_text_{template_name}")
+        if not str(template):
+            return
+
         try:
-            content = render_mail(
-                order.event.settings.twilio_text_order_placed, context
-            )
+            content = render_mail(template, context)
             twilio_send(text=content, to=str(recipient), event=order.event_id)
         except Exception:
             raise
@@ -70,3 +72,22 @@ def twilio_order_placed(order, sender, **kwargs):
                     "recipient": str(recipient),
                 },
             )
+
+
+@receiver(order_placed, dispatch_uid="twilio_order_placed")
+def twilio_order_placed(order, sender, **kwargs):
+    payment = order.payments.first()
+    if (
+        payment
+        and payment.provider == "free"
+        and order.pending_sum == Decimal("0.00")
+        and not order.require_approval
+    ):
+        twilio_order_message(order, "order_free")
+    else:
+        twilio_order_message(order, "order_placed")
+
+
+@receiver(order_paid, dispatch_uid="twilio_order_paid")
+def twilio_order_paid(order, sender, **kwargs):
+    twilio_order_message(order, "order_paid")
