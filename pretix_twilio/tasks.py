@@ -5,7 +5,10 @@ from twilio.rest import Client
 
 
 @app.task()
-def twilio_send_task(text: str, to: str, event: int = None):
+def twilio_send_task(text: str, to: str, event: int):
+    if not (text and to and event):
+        return
+
     with scopes_disabled():
         event = Event.objects.get(id=event)
 
