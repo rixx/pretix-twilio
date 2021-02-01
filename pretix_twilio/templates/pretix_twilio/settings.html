@@ -59,12 +59,6 @@
 
                     {% blocktrans asvar title_canceled_order %}Order canceled{% endblocktrans %}
                     {% include "pretix_twilio/settings_template_fragment.html" with title=title_canceled_order field=form.twilio_text_order_canceled %}
-
-                    {% blocktrans asvar title_custom_order %}Order custom SMS{% endblocktrans %}
-                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_custom_order field=form.twilio_text_order_custom_mail %}
-
-                    {% blocktrans asvar title_download_order %}Reminder to download tickets{% endblocktrans %}
-                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_download_order field=form.twilio_text_download_reminder %}
                 </div>
             </fieldset>
         </div>

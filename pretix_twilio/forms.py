@@ -67,23 +67,11 @@ class TwilioSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
     )
-    twilio_text_order_custom_mail = I18nFormField(
-        label=_("Text"),
-        required=False,
-        widget=I18nTextarea,
-    )
-    twilio_text_download_reminder = I18nFormField(
-        label=_("Text sent to order contact address"),
-        required=False,
-        widget=I18nTextarea,
-    )
     base_context = {
         "twilio_text_order_placed": ["event", "order", "payment"],
         "twilio_text_order_free": ["event", "order"],
         "twilio_text_order_changed": ["event", "order"],
         "twilio_text_order_canceled": ["event", "order"],
-        "twilio_text_order_custom_mail": ["event", "order"],
-        "twilio_text_download_reminder": ["event", "order"],
         "twilio_text_order_paid": ["event", "order", "payment_info"],
     }
 
