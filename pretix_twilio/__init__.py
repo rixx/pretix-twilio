@@ -25,6 +25,7 @@ class PluginApp(PluginConfig):
 
     def ready(self):
         from . import signals  # NOQA
+        from . import tasks  # NOQA
 
 
 default_app_config = "pretix_twilio.PluginApp"

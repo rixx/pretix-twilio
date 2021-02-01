@@ -1,4 +1,5 @@
 import os
+from contextlib import suppress
 from distutils.command.build import build
 
 from django.core import management
@@ -18,7 +19,8 @@ except Exception:
 
 class CustomBuild(build):
     def run(self):
-        management.call_command("compilemessages", verbosity=1)
+        with suppress(Exception):
+            management.call_command("compilemessages", verbosity=1)
         build.run(self)
 
 
@@ -34,7 +36,9 @@ setup(
     author="Tobias Kunze",
     author_email="r@rixx.de",
     license="Apache",
-    install_requires=[],
+    install_requires=[
+        "twilio",
+    ],
     packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
     cmdclass=cmdclass,
