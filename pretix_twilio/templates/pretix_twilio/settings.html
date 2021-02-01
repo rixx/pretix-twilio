@@ -48,11 +48,11 @@
                     {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
                     {% include "pretix_twilio/settings_template_fragment.html" with title=title_placed_order field=form.twilio_text_order_placed %}
 
-                    {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
-                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_paid_order field=form.twilio_text_order_paid %}
-
-                    {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
+                    {% blocktrans asvar title_free_order %}Placed order (free){% endblocktrans %}
                     {% include "pretix_twilio/settings_template_fragment.html" with title=title_free_order field=form.twilio_text_order_free %}
+
+                    {% blocktrans asvar title_paid_order %}Order paid{% endblocktrans %}
+                    {% include "pretix_twilio/settings_template_fragment.html" with title=title_paid_order field=form.twilio_text_order_paid %}
 
                     {% blocktrans asvar title_changed_order %}Order changed{% endblocktrans %}
                     {% include "pretix_twilio/settings_template_fragment.html" with title=title_changed_order field=form.twilio_text_order_changed %}
