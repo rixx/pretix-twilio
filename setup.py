@@ -37,7 +37,7 @@ setup(
     author_email="r@rixx.de",
     license="Apache",
     install_requires=[
-        "twilio",
+        "twilio==6.*",
     ],
     packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
