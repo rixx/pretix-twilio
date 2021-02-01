@@ -1,7 +1,11 @@
 from django.dispatch import receiver
 from django.urls import resolve, reverse
 from i18nfield.strings import LazyI18nString
+from pretix.base.email import get_email_context
+from pretix.base.i18n import language
+from pretix.base.services.mail import render_mail
 from pretix.base.settings import settings_hierarkey
+from pretix.base.signals import order_placed
 from pretix.control.signals import nav_event_settings
 
 TWILIO_TEMPLATES = [
@@ -36,3 +40,33 @@ def navbar_settings(sender, request, **kwargs):
             and url.url_name == "settings",
         }
     ]
+
+
+@receiver(order_placed, dispatch_uid="twilio_order_placed")
+def twilio_order_placed(order, sender, **kwargs):
+    from .tasks import twilio_send
+
+    recipient = order.phone
+    if not order.phone:
+        return
+
+    context = get_email_context(event=order.event, order=order)
+    for k, v in order.event.meta_data.items():
+        context["meta_" + k] = v
+
+    with language(order.locale, order.event.settings.region):
+        try:
+            content = render_mail(
+                order.event.settings.twilio_text_order_placed, context
+            )
+            twilio_send(text=content, to=str(recipient), event=order.event_id)
+        except Exception:
+            raise
+        else:
+            order.log_action(
+                "pretix_twilio.message.sent",
+                data={
+                    "message": content,
+                    "recipient": str(recipient),
+                },
+            )
