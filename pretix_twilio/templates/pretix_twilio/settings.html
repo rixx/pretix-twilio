@@ -6,6 +6,31 @@
 
 {% block inside %}
     <h1>{% trans "Twilio Settings" %}</h1>
+    {% if not order_phone_asked %}
+        <div class="alert alert-danger">
+            {% blocktrans trimmed %}
+            <p>
+            You are currently not asking for phone numbers in your ordering process.
+            When you are not asking for phone numbers, this plugin cannot send out any text messages.
+            </p>
+            <p>
+            Please go to the general pretix settings, to the “Customer and attendee data” tab, and enable customer phone numbers.
+            </p>
+            {% endblocktrans %}
+        </div>
+    {% elif not order_phone_required %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+            <p>
+            Phone numbers are currently not required in your order process.
+            All customers who do not supply a phone number will not be able to receive text messages.
+            </p>
+            <p>
+            If you want to make sure that everybody can receive text messages, please go to the general pretix settings, to the “Customer and attendee data” tab, and make phone numbers mandatory.
+            </p>
+            {% endblocktrans %}
+        </div>
+    {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
