@@ -12,6 +12,7 @@ class TwilioSettingsForm(SettingsForm):
     )
     twilio_auth_token = forms.CharField(
         label=_("Auth token"),
+        required=False,
         help_text=_(
             "You can find your auth token here: https://www.twilio.com/console"
         ),
